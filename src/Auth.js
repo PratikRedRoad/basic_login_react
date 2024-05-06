@@ -69,8 +69,6 @@ export default function (props) {
     setShowForgotPassword(true);
   };
 
-  // const 
-
   const changeAuthMode = () => {
     setAuthMode(authMode === "signin" ? "signup" : "signin")
   }
