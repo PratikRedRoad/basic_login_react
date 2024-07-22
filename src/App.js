@@ -21,6 +21,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/auth" element={<Auth />} />
+        <Route path="/" element={<Auth />} />
       </Routes>
     </BrowserRouter>
 //   <form onSubmit={handleSubmit(onSubmit)}>
