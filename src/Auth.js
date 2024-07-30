@@ -1,83 +1,81 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import ForgotPassword from './components/forgotpassword';
+import Title from './components/ui/Title'
+import PopUp from './components/ui/PopUp';
+// import ForgotPassword from './components/forgotpassword';
+import LoginReject from "./LoginReject";
+import { useNavigate } from "react-router-dom";
 
 export default function (props) {
+  // const [showPopUp, setShowPopUp] = useState(false);
+  const [loading, setLoading] = useState(false); // Add a loading state
+  const [authMode, setAuthMode] = useState("signin");
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm()
+  } = useForm();
+  useEffect(() => {
+    console.log("useEffect called from Auth .jsx");
+  },[])
 
   const onSubmit = async (data) => {
+    const formData = new URLSearchParams();
+    formData.append('username',data.email)
+    formData.append('password',data.password)
+    console.log(formData);
+    setLoading(true); // Set loading to true when submitting the form
     try {
-      console.log(data);
-      const response = await fetch("http://localhost:8000/api/method/rhrms.api.auth.login", {
+      const response = await fetch("http://127.0.0.1:8001/auth", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: JSON.stringify({
-          usr: data.email,
-          pwd: data.password,
-        }),
+        body: formData.toString(),
       });
-
       const responseData = await response.json();
+      console.log(responseData);
+      // if (response.status===200) {
+      //   // const token = responseData.message.token.split(" ");
+      //   localStorage.setItem('token', responseData.message.token);
+      //   // if (responseData.message.roles.includes("HR User") || responseData.message.roles.includes("HR Manager")) {
+          
+          navigate('/invoices');
 
-      if (response.ok) {
-        // Handle successful login
-        console.log("Login successful:", responseData);
-        // You can store the access token or session ID here
-        // and redirect the user or update the UI accordingly
-      } else {
-        // Handle login error
-        console.error("Login failed:", responseData.message);
-      }
+      //   // }
+      // } else {
+      //   console.log(response.status);
+        
+      //   console.error("Login failed:", responseData.message);
+      // }
     } catch (error) {
       console.error("Error:", error);
-    }
+    } finally {
+      setLoading(false);     }
   };
 
-  // const onSubmit = (data) => {
-  //   console.log(data);
-  //   const email = data.email
-  //   const password = data.password
-
-  //   try {
-  //     const response = await fetch('https://your-erpnext-instance.com/api/method/login', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       usr: email,
-  //       pwd: password
-  //     })
-  //   });
-  //   }
-  //   catch(error){
-  //     console.error('Error:', error);
-  //   }
-  // }
-
-  let [authMode, setAuthMode] = useState("signin")
-  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const handleForgotPassword = async () => {
-    console.log("-------- forgot password function called -----------------------");
     setShowForgotPassword(true);
   };
 
   const changeAuthMode = () => {
-    setAuthMode(authMode === "signin" ? "signup" : "signin")
-  }
+    setAuthMode(authMode === "signin" ? "signup" : "signin");
+    localStorage.setItem('isLoggedIn',true)
+  };
 
   if (authMode === "signin") {
-
     return (
       <div className="Auth-form-container">
-        <form className="Auth-form" onSubmit={handleSubmit(onSubmit)}>
+        <Title />
+        {loading ? (
+          // Render a loader component while the API request is being processed
+          <div className="loader-container">
+            <div className="loader"></div>
+          </div>
+        ) : (
+          <form className="Auth-form" onSubmit={handleSubmit(onSubmit)}>
           <div className="Auth-form-content">
             <h3 className="Auth-form-title">Sign In</h3>
             <div className="text-center">
@@ -114,16 +112,23 @@ export default function (props) {
             </p>
           </div>
         </form>
+        )}
       </div>
-    )
+    );
   }
 
   return (
+    
     <div className="Auth-form-container">
-   
-      <form className="Auth-form" onSubmit={handleSubmit(onSubmit)}>
+      <Title />
+      {loading ? (
+        <div className="loader-container">
+          <div className="loader"></div>
+        </div>
+      ) : (
+        <form className="Auth-form" onSubmit={handleSubmit(onSubmit)}>
         <div className="Auth-form-content">
-          <h3 className="Auth-form-title">Sign In</h3>
+          <h3 className="Auth-form-title">Sign Up</h3>
           <div className="text-center">
             Already registered?{" "}
             <span className="link-primary" onClick={changeAuthMode}>
@@ -165,8 +170,12 @@ export default function (props) {
           <p className="text-center mt-2">
         Forgot <a href="#" onClick={handleForgotPassword}>password?</a>
       </p>
+     
         </div>
-      </form>
+        
+      
+        </form>
+      )}
     </div>
-  )
-} 
+  );
+}
