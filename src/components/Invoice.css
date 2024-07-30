@@ -1,0 +1,25 @@
+.invoice table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    border-radius: 10px;
+  }
+  
+  .invoice th, .invoice td {
+    padding: 10px;
+    text-align: left;
+    
+  }
+  
+  .invoice th {
+    background:#f0f346;
+    
+  }
+  
+  .invoice td {
+    background-color: #ffffff;
+  }
+  
+  .invoice tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
