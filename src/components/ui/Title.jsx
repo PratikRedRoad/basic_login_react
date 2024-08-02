@@ -2,6 +2,7 @@ import { UserCircle } from 'lucide-react';
 import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+
 export default function Title(){
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -12,8 +13,19 @@ export default function Title(){
     checkAuthStatus();
   }, []);
   const handleLogout = () => {
-    navigate('/');
-
+    try {
+      const apiUrl = new URL("/api/auth/logout", process.env.REACT_APP_FAST_API_URL);
+      const response = fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        credentials:"include",
+      });
+      navigate("/login");
+    } catch (error) {
+      throw(error);
+    }
 };
     return (
         <div className='header flex flex-row justify-between border-1'>
