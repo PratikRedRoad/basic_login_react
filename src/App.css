@@ -79,6 +79,9 @@ label {
   position: fixed;
   background: white;
   height: 55px;
-}.invoice{
+}.not-found{
+  margin-top: 100px;
+}
+.invoice{
   margin-top: 5%;
 }

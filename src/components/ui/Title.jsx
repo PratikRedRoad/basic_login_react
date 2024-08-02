@@ -6,7 +6,6 @@ export default function Title(){
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   useEffect(() => {
-    console.log("-use effect called from Title . jsx file");
     const checkAuthStatus = () => {
     };
 

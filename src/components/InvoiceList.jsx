@@ -8,19 +8,18 @@ export default function InvoiceList() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    
-    fetch('http://localhost:8001/invoices',{
+    const apiUrl = new URL("/api/invoices/", process.env.REACT_APP_FAST_API_URL);
+      fetch(apiUrl, {
       method: 'GET',
-      // headers: {
-      //   'Content-Type': 'application/json',
-      //   // 'Authorization': localStorage.getItem('token')
-      // }
+      credentials:"include",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
     }).then(response => response.json())
       .then(data => setData(data.invoices))
       .catch(error => setError(error));
   }, []);
 
-  console.log(data);
   if (error) {
     return <div>Error   :: {error.message}</div>;
   } else if (!data) {
