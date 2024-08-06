@@ -11,7 +11,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Auth />} />
-        <Route path="/" element={<Auth />} />
+        <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path= "*" element = {<NotFound/>} component={NotFound} />
       </Routes>

@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Title from './components/ui/Title'
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "./store/userSlice"
 
 export default function (props) {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false); // Add a loading state
   const [authMode, setAuthMode] = useState("signin");
   // const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -30,8 +33,9 @@ export default function (props) {
         body: formData.toString(),
       });
       const responseData = await response.json();
-      if (response.status===200) {      
-          navigate('/home');        }
+      if (response.status===200) {    
+        dispatch(login(responseData))
+        navigate('/home');        }
       else {
       }
     } catch (error) {

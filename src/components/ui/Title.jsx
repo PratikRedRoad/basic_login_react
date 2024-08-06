@@ -1,10 +1,14 @@
 import { UserCircle } from 'lucide-react';
 import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useSelector, useDispatch } from 'react-redux';
+import {logout} from '../../store/userSlice'
 
 export default function Title(){
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const navigate = useNavigate();
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   useEffect(() => {
     const checkAuthStatus = () => {
@@ -23,6 +27,7 @@ export default function Title(){
         credentials:"include",
       });
       navigate("/login");
+      dispatch(logout())
     } catch (error) {
       throw(error);
     }
@@ -32,6 +37,8 @@ export default function Title(){
             <div className='image'>
               <img src="redroadicon.svg" alt='compan-icon'></img>
             </div>
+            { isLoggedIn && (
+              <>
             <div className="header-image">
               <div onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                 <UserCircle className="right-5" />
@@ -52,6 +59,8 @@ export default function Title(){
               </button>
             </div>
           )}
+          </>)}
           </div>
+
     );
 }
